@@ -1,0 +1,13 @@
+    /*for (const int* i = A; i != A+n; i++) {
+        const int* j;
+        for (j = A; (j != A+n) && ((*i != *j) || (i == j)); j++);
+        //если элемент не повторяется
+        if (j != A+n) {
+            const int* k;
+            for (k = B; k != B+n && *i != *k; k++);
+            //если элемент отсутствует в B
+            if (k == B + n) {
+                *(C + (*arraySize)++) = *i;
+            }
+        }
+    }*/
