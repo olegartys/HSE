@@ -1,8 +1,6 @@
 #ifndef CAR_H
 #define CAR_H
 
-#include <stdio.h>
-
 /*
  * Структура данных о машине
  */
@@ -30,14 +28,14 @@ typedef struct {
 
 /*
  * Считывание данных о машине в структуру
- * В случае удачи возвращает 0
+ *
  */
-int input_car_info(Car *car, FILE *input_file);
+void input_car_info(Car *car, FILE *input_file);
 
 /*
  * вывод структуры
  */
-void output_car_info(const Car car, const FILE *output_file);
+void output_car_info(const Car car, FILE *output_file);
 
 #endif // CAR_H
 

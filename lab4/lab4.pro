@@ -10,5 +10,6 @@ include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    car.h
+    car.h \
+    task2.h
 
