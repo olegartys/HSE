@@ -3,8 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += main.cpp \
-    my_list.cpp
+SOURCES += main.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
