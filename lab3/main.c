@@ -11,7 +11,7 @@ char **GetSubstrs (const char *s, size_t *n);
 
 size_t GetValidSymbolsCount (const char *s);
 
-char *ReplaceWords (const char *s);
+const char *ReplaceWords(const char *s);
 
 int main(void)
 {
@@ -92,6 +92,7 @@ char **GetSubstrs (const char *s, size_t *n)
             *n = *n + 1;
             substr = (char**)realloc(substr, *n*sizeof(char*));
             substr[*n-1] = (char*)malloc(sizeof(char)*(len+1));
+            //проверяем, удалось ли выделить память под новую подстроку
             if (substr == NULL || substr[*n-1] == NULL) {
                 return NULL;
             }
@@ -123,7 +124,7 @@ size_t GetValidSymbolsCount(const char *s)
 /*
  * Заменяет begin и end на { и } и возвращает полученную строку
  */
-char *ReplaceWords(const char *s)
+const char *ReplaceWords(const char *s)
 {
     //копируем исходник
     char *_s = (char*)malloc(sizeof(char)*(strlen(s)+1));
@@ -145,11 +146,11 @@ char *ReplaceWords(const char *s)
             //заменяем его первую символ на требуемый
             _s[i] = beg.replace;
             //копируем на его место часть строки, идущую после него
-            memcpy(&_s[i+1], &_s[i+beg.len], (_len-beg.len)*sizeof(char));
+            memcpy(&_s[i+1], &_s[i+beg.len], (_len-beg.len-i+1)*sizeof(char));
 
         } else if (!memcmp(&_s[i], end.src, end.len)) {
             _s[i] = end.replace;
-            memcpy(&_s[i+1], &_s[i+end.len], (_len-end.len)*sizeof(char));
+            memcpy(&_s[i+1], &_s[i+end.len], (_len-end.len-i+1)*sizeof(char));
         }
 
     }
