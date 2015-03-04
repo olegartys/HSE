@@ -11,7 +11,7 @@ char **GetSubstrs (const char *s, size_t *n);
 
 size_t GetValidSymbolsCount (const char *s);
 
-const char *ReplaceWords(const char *s);
+char *ReplaceWords(const char *s);
 
 int main(void)
 {
@@ -27,7 +27,7 @@ int main(void)
 
     char s[BUFF_SIZE];
     //пока не введена пустая строка
-    while (strcmp(fgets(s, BUFF_SIZE-1, stdin), "\n")) {
+    while (strcmp(fgets(s, BUFF_SIZE, stdin), "\n")) {
         //получаем подстроки из считанного буфера
         size_t n;
         char **substr = GetSubstrs(s, &n);
@@ -77,15 +77,15 @@ int main(void)
 char **GetSubstrs (const char *s, size_t *n)
 {
     *n = 0;
-    char **substr = NULL;//malloc (sizeof(char*)*1024);//NULL;
+    char **substr = NULL;
 
     int i;
-    for (i = 0; s[i] != '\n';) {
+    for (i = 0; s[i] != '\n' && s[i] != '\0';) {
         if (isdigit(s[i]))
             i++;
         else {
             const char *iter = &s[i];
-            while (*iter != '\n' && !isdigit(*iter)) iter++;
+            while (*iter != '\n' && !isdigit(*iter) && *iter != '\0') iter++;
 
             int len = iter - &s[i];
 
@@ -124,7 +124,7 @@ size_t GetValidSymbolsCount(const char *s)
 /*
  * Заменяет begin и end на { и } и возвращает полученную строку
  */
-const char *ReplaceWords(const char *s)
+char *ReplaceWords(const char *s)
 {
     //копируем исходник
     char *_s = (char*)malloc(sizeof(char)*(strlen(s)+1));
@@ -133,11 +133,11 @@ const char *ReplaceWords(const char *s)
 
     //искомые токены
     struct {
-        const size_t len;
         const char *src;
+        const size_t len;
         const char replace;
-    } beg = {strlen("begin"), "begin", '{'},
-      end = {strlen("end"), "end", '}'};
+    } beg = {"begin", strlen("begin"), '{'},
+      end = {"end",   strlen("end"),   '}'};
 
     int i;
     for (i = 0; _s[i] != '\0'; i++) {
