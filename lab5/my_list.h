@@ -19,12 +19,9 @@ struct node {
 template <class node_type>
 class my_list {
 
-    typedef my_iterator<node_type> iterator;
-
 private:
 
     friend class my_iterator<node_type>;
-
 
     node<node_type>* _begin;
     node<node_type>* _end;
@@ -32,21 +29,24 @@ private:
     size_t size;
 
 public:
-    my_list();
+    typedef my_iterator<node_type> iterator;
+
+    my_list(); //конструктор по умолчанию
     my_list(const node_type x);
+    my_list(my_list<node_type> const& list); //конструктор копии
     ~my_list();
     
     iterator begin();
     iterator end();
     void push_back(const node_type x);
+    bool is_empty();
+    node_type pop_back();
     /*void insert_after(const T* pred, const T element);
     T erase_after(const T* pred);
     
     void push_front(const T x);
     T pop_front();
-    
-
-    T pop_back(const T x);*/
+    */
     
 };
 
@@ -75,6 +75,41 @@ my_list<node_type>::my_list(const node_type x) {
     this->push_back(x);
 }
 
+/*
+ * Конструктор копии.
+ */
+template <typename node_type>
+my_list<node_type>::my_list(my_list<node_type> const& list) {
+    //выделяем свой кусок динамической памяти для поля нового объекта
+    this->_begin = new node<node_type>;
+    //копируем туда значение
+    this->begin = list->begin;
+
+    this->end = list->end;
+    this->size = list->size;
+}
+
+/*
+ * Деструктор экземпляра
+ */
+template <typename node_type>
+my_list<node_type>::~my_list() {
+   // while (!this->is_empty()) {
+     //   this->pop_back();
+    //}
+}
+
+template <typename node_type>
+bool my_list<node_type>::is_empty() {
+    return size == 0 ? true : false;
+}
+
+template <typename node_type>
+node_type my_list<node_type>::pop_back() {
+    iterator it = this->begin();
+}
+
+
 template <typename node_type>
 void my_list<node_type>::push_back(const node_type x) {
 
@@ -89,8 +124,6 @@ void my_list<node_type>::push_back(const node_type x) {
         _end = p;
     }
 
-   // std::cout << _end->element << std::endl;
-
     size++;
 }
 
@@ -101,11 +134,9 @@ my_iterator<node_type> my_list<node_type>::begin() {
 }
 
 template <typename node_type>
-my_list<node_type>::~my_list() {
-
-    delete _begin;
-    //delete end;
-
+my_iterator<node_type> my_list<node_type>::end() {
+    my_iterator<node_type> it (_end);
+    return it;
 }
 
 /*********************************************************/
@@ -120,6 +151,7 @@ typedef my_iterator<node_type> iterator;
 
 private:
 
+    friend class my_list<node_type>;
     node<node_type>* current_pos;
 
 public:
@@ -129,7 +161,14 @@ public:
 
     node_type& operator*();
     iterator& operator= (const iterator& it);
+    iterator& operator+ (const iterator& it);
+    iterator& operator+ (const node_type x);
+    iterator& operator- (const iterator& it);
+    iterator& operator+= (const iterator& it);
+
     iterator& operator++ ();
+    iterator& operator-- ();
+
 };
 
 template<class node_type>
@@ -139,7 +178,7 @@ node_type& my_iterator<node_type>::operator *() {
 
 template <class node_type>
 my_iterator<node_type>& my_iterator<node_type>::operator =(const my_iterator<node_type>& it) {
-    this->current_pos = it->current_pos;
+    this->current_pos = it.current_pos;
     return *this;
 }
 
@@ -147,6 +186,12 @@ template <class node_type>
 my_iterator<node_type>& my_iterator<node_type>::operator ++() {
     this->current_pos = this->current_pos->next;
     return *this;
+}
+
+template <class node_type>
+my_iterator<node_type>& my_iterator<node_type>::operator+ (const node_type x) {
+    this->current_pos += x;
+    return *(this);
 }
 
 #endif // MY_LIST

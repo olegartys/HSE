@@ -8,11 +8,10 @@ int main()
     my_list<int> list(2);
     list.push_back(3);
 
-    my_iterator<int> iter(list.begin());
-
+    my_list<int>::iterator iter(list.begin());
 
     cout << *iter << endl;
-    ++iter;
+    iter = iter + 1;
     cout << *iter << endl;
 
 
