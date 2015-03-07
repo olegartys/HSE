@@ -38,9 +38,12 @@ public:
     
     iterator begin();
     iterator end();
-    void push_back(const node_type x);
+    size_t get_size();
     bool is_empty();
+
+    void push_back(const node_type x);
     node_type pop_back();
+
     /*void insert_after(const T* pred, const T element);
     T erase_after(const T* pred);
     
@@ -105,6 +108,11 @@ bool my_list<node_type>::is_empty() {
 }
 
 template <typename node_type>
+size_t my_list<node_type>::get_size() {
+    return size;
+}
+
+template <typename node_type>
 node_type my_list<node_type>::pop_back() {
     iterator it = this->begin();
 }
@@ -159,12 +167,16 @@ public:
     my_iterator(node<node_type>* src)  {current_pos = src;}
     my_iterator(iterator* src) {current_pos = src;}
 
-    node_type& operator*();
-    iterator& operator= (const iterator& it);
-    iterator& operator+ (const iterator& it);
-    iterator& operator+ (const node_type x);
-    iterator& operator- (const iterator& it);
-    iterator& operator+= (const iterator& it);
+    node_type& operator* ();
+    iterator& operator=  (const iterator& it);
+    iterator& operator+  (const iterator& it);
+    iterator& operator+  (const node_type x);
+    iterator& operator-  (const iterator& it);
+
+    bool operator== (const iterator& it);
+    bool operator!= (const iterator& it);
+
+  //  iterator& operator+= (const iterator& it);
 
     iterator& operator++ ();
     iterator& operator-- ();
@@ -190,9 +202,21 @@ my_iterator<node_type>& my_iterator<node_type>::operator ++() {
 
 template <class node_type>
 my_iterator<node_type>& my_iterator<node_type>::operator+ (const node_type x) {
-    this->current_pos += x;
-    return *(this);
+    for (int i = 0; i < x; i++)
+        this->current_pos = this->current_pos->next;
+    return *this;
 }
+
+template <class node_type>
+bool my_iterator<node_type>::operator ==(const iterator& it) {
+    return this->current_pos == it.current_pos;
+}
+
+template <class node_type>
+bool my_iterator<node_type>::operator !=(const iterator& it) {
+    return this->current_pos != it.current_pos;
+}
+
 
 #endif // MY_LIST
 

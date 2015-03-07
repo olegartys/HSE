@@ -7,12 +7,12 @@ int main()
 {
     my_list<int> list(2);
     list.push_back(3);
+    list.push_back(4);
 
     my_list<int>::iterator iter(list.begin());
 
-    cout << *iter << endl;
-    iter = iter + 1;
-    cout << *iter << endl;
+    for (; !(iter == list.end() + 1); ++iter)
+        cout << *iter << ' ';
 
 
     cout.flush();
